@@ -1,4 +1,5 @@
-﻿using Castle.MicroKernel.Registration;
+﻿using Castle.Core;
+using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 
 namespace ConsoleApp_AOP
@@ -20,9 +21,16 @@ namespace ConsoleApp_AOP
                 Component.For<IOrder>()
                     .ImplementedBy<Order>().LifestyleTransient());
 
+            // 額外註冊有加載攔截器的Order
+            Container.Register(
+                Component.For<IOrder>()
+                    .ImplementedBy<Order>().LifestyleTransient().Named("logOrder")
+                    .Interceptors(InterceptorReference.ForType<LogInterceptor>()).Anywhere);
+
             Container.Register(
                 Component.For<ICustomer>()
-                    .ImplementedBy<Customer>().LifestyleTransient());
+                    .ImplementedBy<Customer>().LifestyleTransient()
+                    .Interceptors(InterceptorReference.ForType<LogInterceptor>()).Anywhere);
         }
     }
 }

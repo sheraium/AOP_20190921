@@ -10,7 +10,7 @@ namespace ConsoleApp_AOP
         void Delete(string id);
     }
 
-    [Interceptor(typeof(LogInterceptor))]
+    //[Interceptor(typeof(LogInterceptor))]
     public class Order : IOrder
     {
         public int Update(string id, string name)

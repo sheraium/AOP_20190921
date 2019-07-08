@@ -6,21 +6,17 @@ namespace ConsoleApp_AOP
     {
         internal static IOrder GetOrderInstance()
         {
-            //Console.WriteLine("請輸入true或false，決定是否啟用Log");
-            //var isLogEnabled = Boolean.Parse(Console.ReadLine());
+            Console.WriteLine("請輸入true或false，決定是否啟用Log");
+            var isLogEnabled = Boolean.Parse(Console.ReadLine());
 
-            //if (isLogEnabled)
-            //{
-            //    //return new LogOrder(new Order());
-            //    return CastleConfig.Container.Resolve<IOrder>("logOrder");
-            //}
-            //else
-            //{
-            //    //return new Order();
-            //    return CastleConfig.Container.Resolve<IOrder>();
-            //}
-
-            return CastleConfig.Container.Resolve<IOrder>();
+            if (isLogEnabled)
+            {
+                return CastleConfig.Container.Resolve<IOrder>("logOrder");
+            }
+            else
+            {
+                return CastleConfig.Container.Resolve<IOrder>();
+            }
         }
 
         internal static ICustomer GetCustomerInstance()
