@@ -1,4 +1,5 @@
 ﻿using System;
+using Castle.Core;
 
 namespace ConsoleApp_AOP
 {
@@ -7,6 +8,7 @@ namespace ConsoleApp_AOP
         void Contact();
     }
 
+    [Interceptor(typeof(LogInterceptor))]
     public class Customer : ICustomer
     {
         public void Contact()
