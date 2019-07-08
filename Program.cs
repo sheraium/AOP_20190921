@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 
 namespace ConsoleApp_AOP
 {
@@ -6,10 +7,34 @@ namespace ConsoleApp_AOP
     {
         private static void Main(string[] args)
         {
-            //Order order = new Order();            
-            IOrder order = new LogOrder(new Order());
+            //IOrder order = new LogOrder(new Order());
+            IOrder order = Factory.GetOrderInstance();
+
             order.Update("91", "Joey");
             order.Delete("92");
+
+            IOrder order2 = Factory.GetOrderInstance();
+
+            order2.Update("91", "Joey");
+            order2.Delete("92");
+        }
+    }
+
+    internal class Factory
+    {
+        public static IOrder GetOrderInstance()
+        {
+            Console.WriteLine("請輸入true或false，決定是否啟用Log");
+            var isLogEnabled = Boolean.Parse(Console.ReadLine());
+
+            if (isLogEnabled)
+            {
+                return new LogOrder(new Order());
+            }
+            else
+            {
+                return new Order();
+            }
         }
     }
 
