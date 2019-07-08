@@ -1,5 +1,6 @@
-﻿using System;
-using System.Data.Common;
+﻿using Castle.MicroKernel.Registration;
+using Castle.Windsor;
+using System;
 
 namespace ConsoleApp_AOP
 {
@@ -7,7 +8,9 @@ namespace ConsoleApp_AOP
     {
         private static void Main(string[] args)
         {
-            //IOrder order = new LogOrder(new Order());
+            // 加上 IoC container 註冊與初始化
+            CastleConfig.Initialized();
+
             IOrder order = Factory.GetOrderInstance();
 
             order.Update("91", "Joey");
@@ -17,6 +20,24 @@ namespace ConsoleApp_AOP
 
             order2.Update("91", "Joey");
             order2.Delete("92");
+        }
+    }
+
+    internal static class CastleConfig
+    {
+        public static IWindsorContainer Container;
+
+        internal static void Initialized()
+        {
+            Container = new WindsorContainer();
+
+            Container.Register(
+                Component.For<IOrder>()
+                    .ImplementedBy<Order>().LifestyleTransient());
+
+            Container.Register(
+                Component.For<IOrder>()
+                    .Instance(new LogOrder(Container.Resolve<IOrder>())).Named("logOrder").LifestyleTransient());
         }
     }
 
