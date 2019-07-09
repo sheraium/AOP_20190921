@@ -41,9 +41,8 @@ namespace ConsoleApp_Autofac
             //當需要IQueryable<Memo>時，就會用它
             builder.RegisterInstance(memos);
 
-            //Console.Out有實作IDisposable，但不應該由Container來終結
-            //所以要加上ExternallyOwned
-            builder.RegisterInstance(Console.Out).As<TextWriter>().ExternallyOwned();
+            //將內容附加在yyyyMMdd.log(註: 此處未考慮Multi-Threading問題)
+            builder.Register<TextWriter>(c => new StreamWriter($@".\{DateTime.Today:yyyyMMdd}.log", true));
 
             using (var container = builder.Build())
             {
