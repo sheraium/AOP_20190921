@@ -11,7 +11,7 @@ namespace ConsoleApp_LifetimeScope
         {
             AutofacConfig();
 
-            Test();
+            Test2();
 
             Console.ReadLine();
         }
@@ -30,10 +30,27 @@ namespace ConsoleApp_LifetimeScope
             }
         }
 
+        static void Test2()
+        {
+            var scope1 = container.BeginLifetimeScope();
+            var scope2 = container.BeginLifetimeScope();
+            var one1 = scope1.Resolve<TheNewOne>();
+            Console.WriteLine("1->");
+            one1.ShowUniqueKey();
+            var one2A = scope2.Resolve<TheNewOne>();
+            var one2B = scope2.Resolve<TheNewOne>();
+            Console.WriteLine("2A->");
+            one2A.ShowUniqueKey();
+            Console.WriteLine("2B->");
+            one2B.ShowUniqueKey();
+        }
+
+
         private static void AutofacConfig()
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<ResourceMonster>();
+            builder.RegisterType<TheNewOne>().InstancePerLifetimeScope();
             container = builder.Build();
         }
     }
