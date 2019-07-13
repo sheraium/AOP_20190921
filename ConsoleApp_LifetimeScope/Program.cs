@@ -1,23 +1,40 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
+using System;
 
 namespace ConsoleApp_LifetimeScope
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static IContainer container = null;
+
+        private static void Main(string[] args)
+        {
+            AutofacConfig();
+
+            Test();
+
+            Console.ReadLine();
+        }
+
+        private static void Test()
+        {
+            using (var scope = container.BeginLifetimeScope())
+            {
+                var monster1 = scope.Resolve<ResourceMonster>();
+                monster1.Name = "No1";
+                monster1.Test();
+
+                var monster2 = scope.Resolve<ResourceMonster>();
+                monster2.Name = "No2";
+                monster2.Test();
+            }
+        }
+
+        private static void AutofacConfig()
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<ResourceMonster>();
-            var container = builder.Build();
-
-            var monster = container.Resolve<ResourceMonster>();
-            monster.Test();
-            Console.WriteLine("Before IContainer Dispose");
-            container.Dispose();
-            Console.WriteLine("After IContainer Dispose");
-
-            Console.ReadLine();
+            container = builder.Build();
         }
     }
 }
