@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using System;
+using Autofac.Features.OwnedInstances;
 
 namespace ConsoleApp_LifetimeScope
 {
@@ -43,6 +44,10 @@ namespace ConsoleApp_LifetimeScope
             one2A.ShowUniqueKey();
             Console.WriteLine("2B->");
             one2B.ShowUniqueKey();
+
+            var ownedService = container.Resolve<Owned<TheNewOne>>();
+            ownedService.Value.ShowUniqueKey();
+            ownedService.Dispose();
         }
 
 
